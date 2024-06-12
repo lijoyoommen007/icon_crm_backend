@@ -18,7 +18,7 @@ const errorController = require('./app/controllers/ErrorController');
 
 env.config();
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(bodyParser.json())
 app.use(webRoutes);
 app.use(errorController.pageNotFound);
 
