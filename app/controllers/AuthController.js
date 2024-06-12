@@ -3,11 +3,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const authenticateUser = async(req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   try {
     // Find the user by email
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ where: { username } });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -23,7 +23,7 @@ const authenticateUser = async(req, res) => {
     // Generate a JWT token
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    return res.status(200).json({ message: 'Authentication successful', token });
+    return res.status(200).json({ message: 'Authentication successful', token,user });
   } catch (error) {
     console.error('Error during authentication:', error);
     return res.status(500).json({ message: 'Internal server error' });
