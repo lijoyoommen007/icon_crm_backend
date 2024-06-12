@@ -32,7 +32,7 @@ const authenticateUser = async(req, res) => {
 
 const createUser = async (req, res) => {
 	// Extract user data from the request body
-	const { username, useremail, password, mobile, designation } = req.body;
+	const { username, useremail, password, mobile, designation, userrole } = req.body;
   
 	try {
 	  // Check if the user already exists
@@ -50,7 +50,8 @@ const createUser = async (req, res) => {
 		useremail,
 		password: hashedPassword,
 		mobile,
-		designation
+		designation,
+		userrole
 	  });
   
 	  // Send a success response
@@ -61,6 +62,7 @@ const createUser = async (req, res) => {
 	  return res.status(500).json({ message: 'Internal server error' });
 	}
   };
+  
   
 
 module.exports = {authenticateUser,createUser};
