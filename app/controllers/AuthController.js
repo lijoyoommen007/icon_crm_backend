@@ -1,13 +1,17 @@
-const { User } = require('../models/User'); // Adjust the path to your models
+// controllers/AuthController.js
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('../models/User'); // Adjust the path as necessary
 
-const authenticateUser = async(req, res) => {
+const authenticateUser = async (req, res) => {
   const { username, password } = req.body;
-
+  if (!username || !password) {
+    return res.status(401).json({ message: "No email or password" });
+  }
+ 
   try {
     // Find the user by email
-    const user = await User.findOne({ where: { username } });
+    const user = await User.findOne({ where: { username: username } });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -21,21 +25,24 @@ const authenticateUser = async(req, res) => {
     }
 
     // Generate a JWT token
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.userid }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    return res.status(200).json({ message: 'Authentication successful', token,user });
+    return res.status(200).json({ message: 'Authentication successful', token });
   } catch (error) {
     console.error('Error during authentication:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
-}
+};
+
+module.exports = authenticateUser;
 
 const createUser = async (req, res) => {
 	// Extract user data from the request body
-	const { username, useremail, password, mobile, designation, userrole } = req.body;
+	const { username, useremail, password, mobile, designation,userrole } = req.body;
   
 	try {
 	  // Check if the user already exists
+	  console.log(User) 
 	  const existingUser = await User.findOne({ where: { useremail } });
 	  if (existingUser) {
 		return res.status(400).json({ message: 'User with this email already exists' });
@@ -62,7 +69,6 @@ const createUser = async (req, res) => {
 	  return res.status(500).json({ message: 'Internal server error' });
 	}
   };
-  
   
 
 module.exports = {authenticateUser,createUser};
