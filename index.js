@@ -7,6 +7,7 @@ const flash = require("express-flash");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store); // initialize sequelize with session store
+const cors = require("cors"); // add this line to require the cors package
 
 const app = express();
 const router = express.Router();
@@ -23,6 +24,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Middleware to parse JSON bodies (as sent by API clients)
 app.use(bodyParser.json());
+
+// Middleware to enable CORS
+app.use(cors()); // add this line to enable CORS for all routes
 
 app.use(webRoutes);
 app.use(errorController.pageNotFound);
