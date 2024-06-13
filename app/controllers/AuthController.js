@@ -27,7 +27,7 @@ const authenticateUser = async (req, res) => {
     // Generate a JWT token
     const token = jwt.sign({ userId: user.userid }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    return res.status(200).json({ message: 'Authentication successful', token });
+    return res.status(200).json({ message: 'Authentication successful', token,user });
   } catch (error) {
     console.error('Error during authentication:', error);
     return res.status(500).json({ message: 'Internal server error' });
